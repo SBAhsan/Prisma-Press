@@ -1,9 +1,10 @@
 import { prisma } from "../../lib/prisma";
 import config from "../../config";
 import bcrypt from "bcryptjs";
-import { User } from "./user.interface";
+import { ICreateUser } from "./user.interface";
+import { Role } from "../../../generated/prisma/enums";
 
-const registerUserInDB = async (payload: User) => {
+const registerUserInDB = async (payload: ICreateUser) => {
     const { name, email, password, profilePhoto } = payload;
 
     const doUserExist = await prisma.user.findUnique({
@@ -30,7 +31,8 @@ const registerUserInDB = async (payload: User) => {
         create: {
             profilePhoto
         }
-      }
+      },
+      role: payload.role
     },
   });
 

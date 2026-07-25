@@ -1,18 +1,24 @@
 import { prisma } from "../../lib/prisma";
-import { ICreateCommentPayload, IUpdateCommentPayload } from "./comment.interface";
+import {
+  ICreateCommentPayload,
+  IModerateCommentPayload,
+  IUpdateCommentPayload,
+} from "./comment.interface";
 
 const createCommentInDB = async (
   payload: ICreateCommentPayload,
   authorId: string,
 ) => {
-  const { content, postId } = payload;
+  await prisma.post.findUniqueOrThrow({
+    where: {
+      id: payload.postId,
+    },
+  });
 
   const result = await prisma.comment.create({
     data: {
-      content,
+      ...payload,
       authorId,
-      postId,
-      status: "APPROVED",
     },
   });
 
@@ -25,6 +31,12 @@ const getCommentsByAuthorIdFromDB = async (authorId: string) => {
       authorId: authorId,
     },
     include: {
+      post: {
+        select: {
+          id: true,
+          title: true,
+        },
+      },
       author: {
         omit: {
           password: true,
@@ -42,7 +54,13 @@ const getCommentsByCommentIdFromDB = async (commentId: string) => {
       id: commentId,
     },
     include: {
-      post: true,
+      post: {
+        select: {
+          id: true,
+          title: true,
+          views: true,
+        },
+      },
       author: {
         omit: {
           password: true,
@@ -54,45 +72,64 @@ const getCommentsByCommentIdFromDB = async (commentId: string) => {
   return result;
 };
 
+const updateCommentInDB = async (
+  commentId: string,
+  userId: string,
+  payload: IUpdateCommentPayload,
+  isAdmin: boolean,
+) => {
+  const comment = await prisma.comment.findUniqueOrThrow({
+    where: {
+      id: commentId,
+    },
+  });
 
-const updateCommentInDB = async(commentId: string, userId: string, payload: IUpdateCommentPayload, isAdmin : boolean) => {
+  if (!isAdmin && comment.authorId !== userId) {
+    throw new Error("You have no access to update this comment");
+  }
 
-    const comment = await prisma.comment.findUniqueOrThrow({
-        where: {
-            id: commentId
-        }
-    })
+  const result = await prisma.comment.update({
+    where: {
+      id: commentId,
+    },
+    data: payload,
+  });
 
-    if(!isAdmin && comment.authorId !== userId){
-        throw new Error ("You have no access to update this comment");
-    }
+  return result;
+};
 
+const deleteCommentFromDB = async (
+  commentId: string,
+  userId: string,
+  isAdmin: boolean,
+) => {
+  const comment = await prisma.comment.findUniqueOrThrow({
+    where: {
+      id: commentId,
+    },
+  });
+
+  if (!isAdmin && comment.authorId !== userId) {
+    throw new Error("You have no access to delete this comment");
+  }
+
+  const result = await prisma.comment.delete({
+    where: {
+      id: commentId,
+    },
+  });
+
+  return result;
+};
+
+
+const moderateCommentInDB = async (commentId: string, payload: IModerateCommentPayload) => {
     const result = await prisma.comment.update({
         where: {
             id: commentId
         },
-        data: payload
-    })
-
-    return result;
-};
-
-
-const deleteCommentFromDB = async(commentId: string, userId: string, isAdmin : boolean) => {
-    const comment = await prisma.comment.findUniqueOrThrow({
-        where: {
-            id: commentId
-        }
-    })
-
-    if(!isAdmin && comment.authorId !== userId){
-        throw new Error ("You have no access to delete this comment")
-    }
-
-
-    const result = await prisma.comment.delete({
-        where: {
-            id: commentId
+        data: {
+            ...payload
         }
     });
 
@@ -104,5 +141,6 @@ export const commentService = {
   getCommentsByAuthorIdFromDB,
   getCommentsByCommentIdFromDB,
   updateCommentInDB,
-  deleteCommentFromDB
+  deleteCommentFromDB,
+  moderateCommentInDB
 };

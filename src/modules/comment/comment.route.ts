@@ -13,6 +13,8 @@ router.get('/:commentId', commentController.getCommentsByComment);
 
 router.patch('/:commentId', auth(Role.ADMIN, Role.USER), commentController.updateComment);
 
-router.delete('/:commentId', auth(Role.ADMIN, Role.USER), commentController.deleteComment)
+router.delete('/:commentId', auth(Role.ADMIN, Role.USER), commentController.deleteComment);
+
+router.patch('/:commentId/moderate', auth(Role.ADMIN), commentController.moderateComment)
 
 export const commentRoute = router;
