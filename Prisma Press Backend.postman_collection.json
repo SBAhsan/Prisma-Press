@@ -1,0 +1,458 @@
+{
+  "info": {
+    "_postman_id": "82f7c243-6744-4095-b112-4ffd25e29fd7",
+    "name": "Prisma Press Backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54823390",
+    "_collection_link": "https://go.postman.co/collection/54823390-82f7c243-6744-4095-b112-4ffd25e29fd7?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Babla\",\r\n    \"email\": \"babla@gmail.com\",\r\n    \"password\": \"123456\",\r\n    \"profilePhoto\": \"www.babla.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/user/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "user",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Profile",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/user/me?",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "user",
+                "me"
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update My Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Bulbul Chulbul\",\r\n    \"profilePhoto\": \"www.bulbulchulbul.com\",\r\n    \"bio\": \"Amar naam Bulbul Chulbul\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/user/my-profile",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "user",
+                "my-profile"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"babla@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh-Token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/auth/refresh-token",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "auth",
+                "refresh-token"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Post",
+      "item": [
+        {
+          "name": "Create Post",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"This is Babla's second Post\",\r\n  \"content\": \"Content of the post goes hereeeee.\",\r\n  \"thumbnail\": \"https://example.com/thumbnail.jpg\",\r\n  \"isFeatured\": false,\r\n  \"status\": \"PUBLISHED\",\r\n  \"tags\": [\"typescript\", \"prisma\", \"express\"]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/posts",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/posts",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/posts/my-posts",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "posts",
+                "my-posts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Post",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/posts/ba434c53-a8b9-4b94-ae1f-df26c8982546",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "posts",
+                "ba434c53-a8b9-4b94-ae1f-df26c8982546"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Post",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"This is Babla's First Post and Updated\",\r\n  \"content\": \"Updated content of the post goes hereeeee.\",\r\n  \"thumbnail\": \"https://example.com/thumbnail.jpg\",\r\n  \"isFeatured\": false,\r\n  \"status\": \"PUBLISHED\",\r\n  \"tags\": [\"typescript\", \"prisma\", \"express\"]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/posts/49ca340a-d7e7-4d47-92b9-736465cc3145",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "posts",
+                "49ca340a-d7e7-4d47-92b9-736465cc3145"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Post",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/posts/75a5b295-f797-4d51-bcef-4300212597e3",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "posts",
+                "75a5b295-f797-4d51-bcef-4300212597e3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Posts Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/posts/stats",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "posts",
+                "stats"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Comment",
+      "item": [
+        {
+          "name": "Create Comment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"content\": \"This is Babla. This is my third comment in Bulbul's post\",\r\n  \"postId\": \"75a5b295-f797-4d51-bcef-4300212597e3\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/comments",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "comments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Comments By Author_Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/comments/author/ea4a51c5-4ae2-4a32-a846-4f29691ada54",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "comments",
+                "author",
+                "ea4a51c5-4ae2-4a32-a846-4f29691ada54"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Comments By Comment_Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/comments/499fc724-e524-4552-8c63-00e9efcd1b80",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "comments",
+                "499fc724-e524-4552-8c63-00e9efcd1b80"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Comment",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"content\": \"This is Babla. This is my third comment in Bulbul's post. I am updating this comment\",\r\n  \"postId\": \"75a5b295-f797-4d51-bcef-4300212597e3\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/comments/ba19eb6f-d24d-4f50-869c-93e7ee2342aa",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "comments",
+                "ba19eb6f-d24d-4f50-869c-93e7ee2342aa"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Commnet",
+          "request": {
+            "method": "DELETE",
+            "header": []
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
