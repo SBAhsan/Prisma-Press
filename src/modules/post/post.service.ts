@@ -15,6 +15,28 @@ const createPostInDB = async (payload: ICreatePostPayload, userId: string) => {
 
 const getAllPostsFromDB = async () => {
   const posts = await prisma.post.findMany({
+
+    // finding with multiple properties with AND operator (Exact match : Filtering)
+    // where: {
+    //     AND: [
+    //         {
+    //             title: ""
+    //         },
+    //         {
+    //             content: ""
+    //         }
+    //     ]
+    // },
+    
+    // finding (Partial match : Searching)
+    where: {
+        title: {
+            contains: "first",
+            mode: "insensitive"
+        }
+    },
+
+
     include: {
       author: {
         omit: {
