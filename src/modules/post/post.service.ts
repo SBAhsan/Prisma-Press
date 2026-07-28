@@ -1,7 +1,11 @@
 import { title } from "node:process";
 import { CommentStatus, PostStatus } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
-import { ICreatePostPayload, IPostQuery, IUpdatePostPayload } from "./post.interface";
+import {
+  ICreatePostPayload,
+  IPostQuery,
+  IUpdatePostPayload,
+} from "./post.interface";
 
 const createPostInDB = async (payload: ICreatePostPayload, userId: string) => {
   const result = await prisma.post.create({
@@ -15,58 +19,72 @@ const createPostInDB = async (payload: ICreatePostPayload, userId: string) => {
 };
 
 const getAllPostsFromDB = async (query: IPostQuery) => {
+  const limit = query.limit ? Number(query.limit) : 10;
+  const page = query.page ? Number(query.page) : 1;
+  const skip = (page - 1) * limit;
+  const sortBy = query.sortBy ? query.sortBy : "createdAt";
+  const sortOrder = query.sortOrder ? query.sortOrder : "desc";
 
-    const limit = query.limit ? Number(query.limit) : 10;
-    const page = query.page ? Number(query.page) : 1;
-    const skip = (page - 1) * limit;
-    const sortBy = query.sortBy ? query.sortBy : 'createdAt';
-    const sortOrder = query.sortOrder ? query.sortOrder : 'desc';
+  const andConditions: IPostQuery[] = [];
 
-    const andConditions : IPostQuery[] = [];
-    
-    if(query.title){
-        andConditions.push({
-            title: query.title,
-        })
-    }
+  if (query.searchTerm) {
+    andConditions.push({
+      OR: [
+        {
+          title: {
+            contains: query.searchTerm,
+            mode: "insensitive",
+          },
+        },
+        {
+          content: {
+            contains: query.searchTerm,
+            mode: "insensitive",
+          },
+        },
+      ],
+    });
+  }
 
-    if(query.content){
-        andConditions.push({
-            content: query.content
-        })
-    }
+  if (query.title) {
+    andConditions.push({
+      title: query.title,
+    });
+  }
 
-    if(query.authorId){
-        andConditions.push({
-            authorId: query.authorId
-        })
-    }
+  if (query.content) {
+    andConditions.push({
+      content: query.content,
+    });
+  }
 
-    if(query.isFeatured){
-        andConditions.push({
-            isFeatured: Boolean(query.isFeatured)
-        })
-    }
+  if (query.authorId) {
+    andConditions.push({
+      authorId: query.authorId,
+    });
+  }
 
-    if(query.tags){
-        andConditions.push({
-            tags: {
-                hasSome: JSON.parse(query.tags as string)
-            }
-        })
-    }
+  if (query.isFeatured) {
+    andConditions.push({
+      isFeatured: Boolean(query.isFeatured),
+    });
+  }
 
-    if(query.status){
-         andConditions.push({
-            status: query.status
-         })
-    }
+  if (query.tags) {
+    andConditions.push({
+      tags: {
+        hasSome: JSON.parse(query.tags as string),
+      },
+    });
+  }
 
-    // if(query.)
-
+  if (query.status) {
+    andConditions.push({
+      status: query.status,
+    });
+  }
 
   const posts = await prisma.post.findMany({
-
     // finding with multiple properties with AND operator (Exact match : Filtering)
     // that means if each of these properties' value is found in a post, then the post will be shown
     // where: {
@@ -79,9 +97,9 @@ const getAllPostsFromDB = async (query: IPostQuery) => {
     //         }
     //     ]
     // },
-    
+
     // finding with multiple properties with OR operator (Partial match : Searching)
-    // that means if one of these is found in a post, then the post will be shown 
+    // that means if one of these is found in a post, then the post will be shown
     // where: {
     //     OR: [
     //         {
@@ -106,22 +124,22 @@ const getAllPostsFromDB = async (query: IPostQuery) => {
     // where: {
     //     AND: [
     //         query.searchTerm ? {
-    //             OR: [
-    //                 {
-    //                     title: {
-    //                         contains: query.searchTerm,
-    //                         mode: 'insensitive'
-    //                     }
-    //                 },
-    //                 {
-    //                     content: {
-    //                         contains: query.searchTerm,
-    //                         mode: 'insensitive'
-    //                     }
-    //                 }
-    //             ]
-    //         } : {},
-            
+    //     OR: [
+    //         {
+    //             title: {
+    //                 contains: query.searchTerm,
+    //                 mode: 'insensitive'
+    //             }
+    //         },
+    //         {
+    //             content: {
+    //                 contains: query.searchTerm,
+    //                 mode: 'insensitive'
+    //             }
+    //         }
+    //     ]
+    // } : {},
+
     //         // title filtering
     //         query.title ? { title : query.title } : {},
 
@@ -131,7 +149,7 @@ const getAllPostsFromDB = async (query: IPostQuery) => {
     // },
 
     where: {
-        AND: andConditions
+      AND: andConditions,
     },
 
     // pagination
@@ -139,7 +157,7 @@ const getAllPostsFromDB = async (query: IPostQuery) => {
     skip: skip,
 
     orderBy: {
-        [sortBy] : sortOrder
+      [sortBy]: sortOrder,
     },
 
     include: {
@@ -262,7 +280,7 @@ const getPostStatsFromDB = async () => {
       totalComments,
       totalApprovedComments,
       totalRejectedComments,
-      totalPostViews: totalPostsViewsAggregate._sum
+      totalPostViews: totalPostsViewsAggregate._sum,
     };
   });
   return transactionResult;
