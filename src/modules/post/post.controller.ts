@@ -57,8 +57,6 @@ const getMyPosts = catchAsync(async (req: Request, res: Response, next: NextFunc
 const getSinglePost = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
     const postId = req.params.postId;
 
-    console.log(postId);
-
     if(!postId){
         throw new Error ("Post Id required")
     }
